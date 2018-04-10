@@ -1,3 +1,5 @@
+//Peer review comments signed MAN by Michael A. Nowiszewski
+//DUPLICATE FILE, CHECKED WITH STUDENT AND PEER REVIEWED LATEST VERSION 'waterBetter.c'
 #include <stdio.h>
 #include <cs50.h>
 

@@ -1,3 +1,4 @@
+//Peer review comments signed MAN by Michael A. Nowiszewski
 #include <stdio.h>
 #include <cs50.h>
 
@@ -5,7 +6,7 @@ int main(void)
 {
     int height;
 
-    // do while loop will continue prompting user until needs are met
+    // do while loop will continue prompting user until needs are met //specify 'needs'? be technical! MAN
     do
     {
 
@@ -13,7 +14,7 @@ int main(void)
 
     }
 
-    while (height < 0 || height > 23);
+    while (height < 0 || height > 23); //what does this line do? MAN ("loop fires while height is within range etc.")
 
 
 // Initial for loop to print the number of lines as specified
@@ -34,3 +35,17 @@ int main(void)
         printf("\n");
     }
 }
+
+/*Excellent commenting and indentation, well done Mike! MAN
+check50 output below:
+:) mario.c exists.
+:) mario.c compiles.
+:) rejects a height of -1
+:) handles a height of 0 correctly
+:) handles a height of 1 correctly
+:) handles a height of 2 correctly
+:) handles a height of 23 correctly
+:) rejects a height of 24, and then accepts a height of 2
+:) rejects a non-numeric height of "foo"
+:) rejects a non-numeric height of ""
+See https://cs50.me/checks/3ecdf1e44d022cff5dfca512d9852928c8d8cb26 for more detail.*/
