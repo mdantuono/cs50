@@ -6,7 +6,7 @@
 int main(void)
 {
     // Get the string of a name
-    string name = get_string("Name: ");
+    string name = get_string("");
     // Print the first character in upper case
     printf("%c", toupper(name[0]));
 

@@ -5,7 +5,7 @@ int main(void)
 {
     // Initial declaring of variables
     int minutes;
-    int bottles = 0;
+    int bottles = 12;
 
     // Prompt user for minutes and verify it is a valid number
     do
@@ -14,11 +14,8 @@ int main(void)
     }
     while (minutes < 0);
 
-    // For loop adding number of bottles based on minutes entered
-    for (int i = 0; i < minutes; i++)
-    {
-        bottles = bottles + 12;
-    }
+    // Multiply bottles and minutes and set number to bottles
+    bottles = bottles * minutes;
 
     // Print number of bottles
     printf("Bottles: %i \n", bottles);
