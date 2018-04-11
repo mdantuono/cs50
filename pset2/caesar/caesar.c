@@ -20,11 +20,11 @@ int main(int argc, string argv[])
 
     for (int i = 0; i < strlen(plaintext); i++) // Loop to convert plaintext
         {
-            ciphertext = converted[i] + key;
+            ciphertext = converted[i] + key; // Figure out way to convert each letter of the word
 
             printf("%s\n", ciphertext);
         }
 
-    printf("ciphertext: %s\n", ciphertext);
+    printf("ciphertext: %s\n", ciphertext); // Must include code to bypass numbers and include capital letters
 
 }
