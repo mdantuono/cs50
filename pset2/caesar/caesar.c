@@ -9,20 +9,19 @@ int main(int argc, string argv[])
     if (!argv[1])
     {
         return 1;
-        break;
     }
     int key;
     string ciphertext;
 
-    key = get_int(argv[1]);
-    int converted = atoi(key);
+    key = get_int(argv[1]); // Get key from command line argument
+    int converted = atoi(key); // Convert key to an integer
 
-    string plaintext = get_string("plaintext: ");
+    string plaintext = get_string("plaintext: "); // Get the plaintext from the user
 
-    for (int i = 0; i < strlen(plaintext); i++)
+    for (int i = 0; i < strlen(plaintext); i++) // Loop to convert plaintext
         {
-            int converted = atoi(plaintext);
-            ciphertext = sprintf("%s", converted + key);
+            ciphertext = converted[i] + key;
+
             printf("%s\n", ciphertext);
         }
 
