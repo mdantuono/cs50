@@ -5,26 +5,25 @@
 
 int main(int argc, string argv[])
 {
-    argc = 2;
-    if (!argv[1])
+    argc = 2; // Specify the number of arguments that will be executed in the command line (1 for file name, 1 for key argument)
+    if (!argv[1] || argc > 2) // make sure argv[1] exists and make sure there is no more than 2 arguments made
     {
-        return 1;
+        printf("You dun goof'd\n");
+        return 1; // If so, return error
     }
-    int key;
-    string ciphertext;
+    string k = argv[1]; // Declare and set key variable to argv[1] argument
 
-    key = get_int(argv[1]); // Get key from command line argument
-    int converted = atoi(key); // Convert key to an integer
+    int key = atoi(k); // Convert key to an integer
 
-    string plaintext = get_string("plaintext: "); // Get the plaintext from the user
+    string plaintext = get_string("plaintext: "); // Get the plaintext from the user, store in variable
 
-    for (int i = 0; i < strlen(plaintext); i++) // Loop to convert plaintext
+
+    for (int i = 0; i < strlen(plaintext); i++) // Loop to CONVERT plaintext
         {
-            ciphertext = converted[i] + key; // Figure out way to convert each letter of the word
-
-            printf("%s\n", ciphertext);
+            char ciphertext = plaintext[i] + key; // Figure out way to convert each letter of the word
+            printf("%c", ciphertext); // Print each character
         }
 
-    printf("ciphertext: %s\n", ciphertext); // Must include code to bypass numbers and include capital letters
+    printf("\n"); // New line
 
 }
