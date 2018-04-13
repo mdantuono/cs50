@@ -2,6 +2,7 @@
 #include <cs50.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 int main(int argc, string argv[])
 {
@@ -17,12 +18,44 @@ int main(int argc, string argv[])
 
     string plaintext = get_string("plaintext: "); // Get the plaintext from the user, store in variable
 
+    printf("ciphertext: ");
 
     for (int i = 0; i < strlen(plaintext); i++) // Loop to CONVERT plaintext
+    {
+        char ciphertext;
+
+        if (isalpha(plaintext[i])) // Checks if characters is alphabetical
         {
-            char ciphertext = plaintext[i] + key; // Figure out way to convert each letter of the word
-            printf("%c", ciphertext); // Print each character
+            if (isupper(plaintext[i])) // Checks if uppercase
+            {
+                ciphertext = plaintext[i] + key; // Add key value to each letter of plaintext
+
+                while (ciphertext > 90) // While character exceeds uppercase characters...
+                {
+                    ciphertext -= 26; // ... wrap it back around.
+                }
+
+                printf("%c", ciphertext); // Print each character
+            }
+
+            else if (islower(plaintext[i])) // Checks if lowercase
+            {
+                ciphertext = plaintext[i] + key; // Add key value to each letter of plaintext
+
+                while (ciphertext > 122) // While character exceeds lowercase characters...
+                {
+                    ciphertext -= 26; // ... wrap it back around.
+                }
+
+                printf("%c", ciphertext); // Print each character
+            }
         }
+        else
+        {
+            ciphertext = plaintext[i];
+            printf("%c", ciphertext); // Print characters non-alpha
+        }
+    } // End loop
 
     printf("\n"); // New line
 
