@@ -12,7 +12,7 @@ int main(int argc, string argv[])
         printf("You dun goof'd\n");
         return 1; // If so, return error
     }
-    string k = argv[1]; // Declare and set key variable to argv[1] argument
+    string k = argv[1]; // Declare and set key variable to argv[1] argument (k is a string)
 
     int key = atoi(k); // Convert key to an integer
 
@@ -28,25 +28,33 @@ int main(int argc, string argv[])
         {
             if (isupper(plaintext[i])) // Checks if uppercase
             {
-                ciphertext = plaintext[i] + key; // Add key value to each letter of plaintext
 
-                while (ciphertext > 90) // While character exceeds uppercase characters...
+                int letter = plaintext[i] - 'A';
+
+                do
                 {
-                    ciphertext -= 26; // ... wrap it back around.
+                    letter -= 26; // ... wrap it back around.
                 }
+                while (letter + key > 25); // If the character exceeds uppercase characters...
 
+                letter += 'A';
+                ciphertext = letter + key; // Add key value to each letter of plaintext
                 printf("%c", ciphertext); // Print each character
             }
 
             else if (islower(plaintext[i])) // Checks if lowercase
             {
-                ciphertext = plaintext[i] + key; // Add key value to each letter of plaintext
 
-                while (ciphertext > 122) // While character exceeds lowercase characters...
+                int letter = plaintext[i] - 'a';
+
+                do
                 {
-                    ciphertext -= 26; // ... wrap it back around.
+                    letter -= 26; // ... wrap it back around.
                 }
+                while (letter + key > 25); // If the character exceeds lowercase characters...
 
+                letter += 'a';
+                ciphertext = letter + key; // Add key value to each letter of plaintext
                 printf("%c", ciphertext); // Print each character
             }
         }
@@ -57,6 +65,6 @@ int main(int argc, string argv[])
         }
     } // End loop
 
-    printf("\n"); // New line
+    printf("\n"); // Print new line
 
 }
