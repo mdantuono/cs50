@@ -23,19 +23,19 @@ int main(int argc, string argv[])
     for (int i = 0; i < strlen(plaintext); i++) // Loop to CONVERT plaintext
     {
         char ciphertext;
+        int letter;
 
         if (isalpha(plaintext[i])) // Checks if characters is alphabetical
         {
             if (isupper(plaintext[i])) // Checks if uppercase
             {
 
-                int letter = plaintext[i] - 'A';
+                letter = plaintext[i] - 'A';
 
-                do
+                while (letter + key > 25) // If the character exceeds uppercase characters...
                 {
                     letter -= 26; // ... wrap it back around.
                 }
-                while (letter + key > 25); // If the character exceeds uppercase characters...
 
                 letter += 'A';
                 ciphertext = letter + key; // Add key value to each letter of plaintext
@@ -45,13 +45,12 @@ int main(int argc, string argv[])
             else if (islower(plaintext[i])) // Checks if lowercase
             {
 
-                int letter = plaintext[i] - 'a';
+                letter = plaintext[i] - 'a';
 
-                do
+                while (letter + key > 25) // If the character exceeds uppercase characters...
                 {
                     letter -= 26; // ... wrap it back around.
                 }
-                while (letter + key > 25); // If the character exceeds lowercase characters...
 
                 letter += 'a';
                 ciphertext = letter + key; // Add key value to each letter of plaintext
