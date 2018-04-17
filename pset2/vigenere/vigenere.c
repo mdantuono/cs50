@@ -26,55 +26,50 @@ int main(int argc, string argv[])
 
     printf("ciphertext: ");
 
-    for (int i = 0; i < strlen(plaintext);) // Loop to iterate through and CONVERT plaintext
+    for (int i = 0, n = 0; i < strlen(plaintext); i++) // Loop to iterate through and CONVERT plaintext
     {
-        for (int n = 0; n < strlen(keyword);) // Loop to iterate through keyword
+
+        char ciphertext;
+        int key;
+
+        if (n > strlen(keyword) - 1)
         {
-            char ciphertext;
-            int key;
+            n -= strlen(keyword); // Wrap keyword back around
+        }
 
-            if (isupper(keyword[n])) // If/else statement indexing the keyword characters to 0 - 25
-            {
-                key = keyword[n] - 'A';
-            }
-            else if (islower(keyword[n]))
-            {
-                key = keyword[n] - 'a';
-            }
+        if (isupper(keyword[n])) // If/else statement indexing the keyword characters to 0 - 25
+        {
+            key = keyword[n] - 'A';
+        }
+        else if (islower(keyword[n]))
+        {
+            key = keyword[n] - 'a';
+        }
 
-            if (n < strlen(keyword))
-            {
-                if (isalpha(plaintext[i])) // Checks if characters is alphabetical
-                {
-                    if (isupper(plaintext[i])) // Checks if uppercase
-                    {
-                        ciphertext = (((plaintext[i] - 'A') + key) % 26 + 'A'); // Add keyword letter value to each letter of plaintext, adjusting to overflow with modulo
-                        printf("%c", ciphertext); // Print each character
-                        n++;
-                    }
 
-                    else // Checks if lowercase
-                    {
-                        ciphertext = (((plaintext[i] - 'a') + key) % 26 + 'a'); // Add keyword letter value to each letter of plaintext, adjusting to overflow with modulo
-                        printf("%c", ciphertext); // Print each character
-                        n++;
-                    }
-                }
-                else
-                {
-                    ciphertext = plaintext[i];
-                    printf("%c", ciphertext); // Print characters non-alpha
-                }
-            }
-            else
+        if (isalpha(plaintext[i])) // Checks if characters is alphabetical
+        {
+            if (isupper(plaintext[i])) // Checks if uppercase
             {
-                n -= strlen(keyword); // Wrap keyword back around
+                ciphertext = (((plaintext[i] - 'A') + key) % 26 + 'A'); // Add keyword letter value to each letter of plaintext, adjusting to overflow with modulo
+                printf("%c", ciphertext); // Print each character
+                n++;
             }
 
-            i++;
-        } // End of KEYWORD loop
+            else // Checks if lowercase
+            {
+                ciphertext = (((plaintext[i] - 'a') + key) % 26 + 'a'); // Add keyword letter value to each letter of plaintext, adjusting to overflow with modulo
+                printf("%c", ciphertext); // Print each character
+                n++;
+            }
+        }
+        else
+        {
+            ciphertext = plaintext[i];
+            printf("%c", ciphertext); // Print characters non-alpha
+        }
 
-    } // End of PLAINTEXT loop
+    } // End loop
 
     printf("\n"); // Print new line
 }

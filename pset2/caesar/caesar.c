@@ -23,37 +23,20 @@ int main(int argc, string argv[])
     for (int i = 0; i < strlen(plaintext); i++) // Loop to CONVERT plaintext
     {
         char ciphertext;
-        int letter;
 
         if (isalpha(plaintext[i])) // Checks if characters is alphabetical
         {
             if (isupper(plaintext[i])) // Checks if uppercase
             {
 
-                letter = plaintext[i] - 'A';
-
-                while (letter + key > 25) // If the character exceeds uppercase characters...
-                {
-                    letter -= 26; // ... wrap it back around.
-                }
-
-                letter += 'A';
-                ciphertext = letter + key; // Add key value to each letter of plaintext
+                ciphertext = (((plaintext[i] - 'A') + key) % 26 + 'A'); // Add keyword letter value to each letter of plaintext, adjusting to overflow with modulo
                 printf("%c", ciphertext); // Print each character
             }
 
             else if (islower(plaintext[i])) // Checks if lowercase
             {
 
-                letter = plaintext[i] - 'a';
-
-                while (letter + key > 25) // If the character exceeds uppercase characters...
-                {
-                    letter -= 26; // ... wrap it back around.
-                }
-
-                letter += 'a';
-                ciphertext = letter + key; // Add key value to each letter of plaintext
+                ciphertext = (((plaintext[i] - 'a') + key) % 26 + 'a'); // Add keyword letter value to each letter of plaintext, adjusting to overflow with modulo
                 printf("%c", ciphertext); // Print each character
             }
         }
