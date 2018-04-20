@@ -50,3 +50,7 @@ int main(int argc, string argv[])
     printf("\n"); // Print new line
 
 }
+
+
+// great job using comments and being able to use modulo to figure out the loop, as you will see in my set of ceaser i used a different way of looping the characters
+// with their ascii values. nice style and spacing clear variable names as well.

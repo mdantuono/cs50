@@ -73,3 +73,6 @@ int main(int argc, string argv[])
 
     printf("\n"); // Print new line
 }
+
+// obvious working code, be carefull with the amount of if and else if statements you use, see if you can handle two circumstances at a time by using the if statements
+// when you know there is only two ways the code will play out. besides that code is still cleanly spaced and commented well, great job overall.

@@ -23,3 +23,5 @@ int main(void)
 
     printf("\n");
 }
+
+// simple and straight forward clean code, great job.
