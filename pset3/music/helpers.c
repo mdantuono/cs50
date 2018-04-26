@@ -72,7 +72,7 @@ int frequency(string note)
             freqVar = freqVar / 8.0;
             break;
         case 2 :
-            freqVar = round(freqVar / 4.0);
+            freqVar = freqVar / 4.0;
             break;
         case 3 :
             freqVar = freqVar / 2.0;
