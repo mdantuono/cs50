@@ -24,7 +24,7 @@ int duration(string fraction)
         case 8 :
             break;
         case 4 :
-            x = x * 2;
+            x = x * 2;//SC: could use shorthand on math x *= 2
             break;
         case 2 :
             x = x * 4;
@@ -53,7 +53,7 @@ int frequency(string note)
     }
     // printf("Note is %s, note value is %c, accidental is %c, octave is %i\n", note, noteVal, accidental, octave);
 
-    switch (accidental)
+    switch (accidental)//SC: this could be an if else statment because theres only 2 cases.
     {
         case '#' :
             freqVar = freqVar * pow(2.0, 1.0 / 12.0); // A4 added with the accidental
@@ -69,10 +69,10 @@ int frequency(string note)
     switch (octave)
     {
         case 1 :
-            freqVar = freqVar / 8.0;
+            freqVar = freqVar / 8.0;//SC: could use shorthand on math freqVar /= 8.0;
             break;
         case 2 :
-            freqVar = round(freqVar / 4.0);
+            freqVar = round(freqVar / 4.0);//SC: you dont need the round function here.
             break;
         case 3 :
             freqVar = freqVar / 2.0;
@@ -96,7 +96,7 @@ int frequency(string note)
     switch (noteVal)
     {
         case 'C' :
-            freqVar = freqVar / pow(2.0, 9.0 / 12.0);
+            freqVar = freqVar / pow(2.0, 9.0 / 12.0);//SC: could use shorthand on math freqVar /= pow(2.0, 9.0 / 12.0);
             break;
         case 'D' :
             freqVar = freqVar / pow(2.0, 7.0 / 12.0);
@@ -117,7 +117,7 @@ int frequency(string note)
             break;
     }
 
-    freq = round(freqVar);
+    freq = round(freqVar);//SC: this line is not needed could put return round(freqVar); on line 122
 
     return freq; // implement the math of accidentals, then octaves, then note
 }
