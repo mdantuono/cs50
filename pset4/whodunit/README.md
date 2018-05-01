@@ -2,23 +2,26 @@
 
 ## What's `stdint.h`?
 
-TODO
+<stdint.h> is the header file for the program to include data types that specify exact-width integer types.
 
 ## What's the point of using `uint8_t`, `uint32_t`, `int32_t`, and `uint16_t` in a program?
 
-TODO
+They are aliases for C/C++ primitive data types.
 
 ## How many bytes is a `BYTE`, a `DWORD`, a `LONG`, and a `WORD`, respectively?
 
-TODO
+a BYTE is 1 byte.
+a DWORD is 4 bytes.
+a LONG is 4 bytes.
+a WORD is 2 bytes.
 
 ## What (in ASCII, decimal, or hexadecimal) must the first two bytes of any BMP file be? Leading bytes used to identify file formats (with high probability) are generally called "magic numbers."
 
-TODO
+bfType
 
 ## What's the difference between `bfSize` and `biSize`?
 
-TODO
+bfSize is the size, in bytes, of the bmp image. While biSize is the number of bytes required by the structure
 
 ## What does it mean if `biHeight` is negative?
 
