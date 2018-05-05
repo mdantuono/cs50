@@ -1,4 +1,4 @@
-// Copies a BMP file
+// Resizes a BMP file, by n
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,14 +11,14 @@ int main(int argc, char *argv[])
     // ensure proper usage
     if (argc != 4)
     {
-        fprintf(stderr, "Usage: copy infile outfile\n");
+        fprintf(stderr, "Usage: ./resize n infile outfile\n");
         return 1;
     }
 
     // remember filenames
+    char n = atoi(argv[1]); //this will be our resize key
     char *infile = argv[2];
     char *outfile = argv[3];
-    char n = atoi(argv[1]); //this will be our resize key
 
     if (!isdigit(argv[1]) || n < 1 || n > 100)
     {
@@ -61,14 +61,25 @@ int main(int argc, char *argv[])
         return 4;
     }
 
-    // write outfile's BITMAPFILEHEADER
-    fwrite(&bf, sizeof(BITMAPFILEHEADER), 1, outptr);
-
-    // write outfile's BITMAPINFOHEADER
-    fwrite(&bi, sizeof(BITMAPINFOHEADER), 1, outptr);
-
     // determine padding for scanlines
     int padding = (4 - (bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
+
+    // new header variables
+    BITMAPFILEHEADER new_bf = bf;
+    BITMAPINFOHEADER new_bi = bi;
+
+    // modify the headers
+    new_bi.biWidth *= n;
+    new_bi.biHeight *= n;
+    int new_padding = (4 - (new_bi.biWidth * sizeof(RGBTRIPLE)) % 4) % 4;
+    new_bi.biSizeImage = (new_bi.biWidth + new_padding) * (new_bi.biHeight);
+
+    // write outfile's BITMAPFILEHEADER
+    fwrite(&new_bf, sizeof(BITMAPFILEHEADER), 1, outptr);
+
+    // write outfile's BITMAPINFOHEADER
+    fwrite(&new_bi, sizeof(BITMAPINFOHEADER), 1, outptr);
+
 
     // iterate over infile's scanlines
     for (int i = 0, biHeight = abs(bi.biHeight); i < biHeight; i++)
@@ -82,26 +93,21 @@ int main(int argc, char *argv[])
             // read RGB triple from infile
             fread(&triple, sizeof(RGBTRIPLE), 1, inptr);
 
-
-
-            // write RGB triple to outfile
+            // write RGB triple to outfile, n times --WIDTH TAKEN CARE OF--
             fwrite(&triple, sizeof(RGBTRIPLE), n, outptr);
         }
 
         // skip over padding, if any
         fseek(inptr, padding, SEEK_CUR);
 
-        // then add it back (to demonstrate how)
+        // then add it back (to demonstrate how) adding new padding
         if (padding != 0)
         {
-            for (int k = 0; k < padding; k++)
+            for (int k = 0; k < new_padding; k++)
             {
                 fputc(0x00, outptr);
             }
         }
-
-        bi.biWidth *= n;
-        bi.biHeight *= n;
 
     }
 
