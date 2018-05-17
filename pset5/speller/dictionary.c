@@ -2,11 +2,16 @@
  * Implements a dictionary's functionality.
  */
 
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include "dictionary.h"
 
 const int hash_size = 27;
+int word_count = 0;
 
 // make struct of node and set properties for linked list
 typedef struct node
@@ -18,6 +23,13 @@ node;
 
 // create hash table
 node *list[hash_size];
+
+// hash function from cs50 study website
+int hash_function(const char* word)
+{
+     int hash = toupper(word[0] - 'A');
+     return hash % 27;
+}
 
 /**
  * Returns true if word is in dictionary else false.
@@ -33,34 +45,34 @@ bool check(const char *word)
  */
 bool load(const char *dictionary)
 {
+    FILE* dict = fopen(dictionary, "r");
+
+    char word[LENGTH + 1];
 
     // scan the dictionary until the end of the file
-    while (fscanf(dictionary, "%s" word) != EOF)
+    while (fscanf(dict, "%s\n", word) != EOF)
     {
-        // hash function from cs50 study website
-        int hash_function(const char* word)
-        {
-             int hash = toupper(word[0] - 'A');
-             return hash % 27;
-        }
+        int hash = hash_function(word);
 
         // allocate memory for each new word
         node *new_word = malloc(sizeof(node));
 
-        // return false if it finds NULL
+        // make sure malloc worked, return false if it finds NULL
         if (new_word == NULL)
         {
             unload();
             return false;
         }
 
+        // increment counter
+        word_count++;
+
         strcpy(new_word-> word, word);
 
-        insert()
+        // insert into hash table linked list
+        new_word-> next = list[hash];
 
-
-
-
+        list[hash] = new_word;
 
     }
 
@@ -72,8 +84,7 @@ bool load(const char *dictionary)
  */
 unsigned int size(void)
 {
-    // TODO
-    return 0;
+    return word_count;
 }
 
 /**
