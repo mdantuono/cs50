@@ -10,8 +10,10 @@
 
 #include "dictionary.h"
 
-const int hash_size = 27;
+// variable declarations
+const int hash_size = 26;
 int word_count = 0;
+int hash = 0;
 
 // make struct of node and set properties for linked list
 typedef struct node
@@ -22,13 +24,13 @@ typedef struct node
 node;
 
 // create hash table
-node *list[hash_size];
+node* list[hash_size];
 
 // hash function from cs50 study website
 int hash_function(const char* word)
 {
      int hash = toupper(word[0] - 'A');
-     return hash % 27;
+     return hash % hash_size;
 }
 
 /**
@@ -36,7 +38,11 @@ int hash_function(const char* word)
  */
 bool check(const char *word)
 {
-    // TODO
+    // for (i = 0; i < sizeof(text); i++)
+    // {
+    //     fscanf(text, "%s", word);
+    //     if ()
+    // }
     return false;
 }
 
@@ -45,37 +51,57 @@ bool check(const char *word)
  */
 bool load(const char *dictionary)
 {
-    FILE* dict = fopen(dictionary, "r");
+    // open dictionary file
+    FILE *dict = fopen(dictionary, "r");
 
-    char word[LENGTH + 1];
+    if (dict == NULL)
+    {
+        fprintf(stderr, "Dictionary file not loaded.\n");
+        return 1;
+    }
+    else fprintf(stderr, "File opened.\n");
+
+    // initially set all pointers in hash table to NULL
+    for (int i = 0; i < hash_size; i++)
+    {
+        list[i] = NULL;
+    }
+
+    // set variable word
+    char file_word[LENGTH + 1];
 
     // scan the dictionary until the end of the file
-    while (fscanf(dict, "%s\n", word) != EOF)
+    while (fscanf(dict, "%s\n", file_word) != EOF)
     {
-        int hash = hash_function(word);
+        hash = hash_function(file_word);
 
         // allocate memory for each new word
-        node *new_word = malloc(sizeof(node));
+        node* new_node = malloc(sizeof(node));
 
         // make sure malloc worked, return false if it finds NULL
-        if (new_word == NULL)
+        if (new_node == NULL)
         {
-            unload();
             return false;
         }
 
-        // increment counter
+        // increment counter for every word found
         word_count++;
 
-        strcpy(new_word-> word, word);
+        strcpy(new_node->word, file_word);
 
         // insert into hash table linked list
-        new_word-> next = list[hash];
-
-        list[hash] = new_word;
+        if (list[hash] == NULL)
+        {
+            list[hash] = new_node;
+        }
+        else
+        {
+            new_node-> next = list[hash];
+            list[hash] = new_node;
+        }
 
     }
-
+    fclose(dict);
     return true;
 }
 
@@ -92,6 +118,6 @@ unsigned int size(void)
  */
 bool unload(void)
 {
-    // TODO
-    return false;
+    return true;
+
 }
