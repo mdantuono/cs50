@@ -13,7 +13,7 @@
 // variable declarations
 const int hash_size = 26;
 int word_count = 0;
-int hash = 0;
+int hash_num = 0;
 
 // make struct of node and set properties for linked list
 typedef struct node
@@ -27,10 +27,10 @@ node;
 node* list[hash_size];
 
 // hash function from cs50 study website
-int hash_function(const char* word)
+int hash(const char* word)
 {
-     int hash = toupper(word[0] - 'A');
-     return hash % hash_size;
+    hash_num = toupper(word[0] - 'A');
+    return hash_num % hash_size;
 }
 
 /**
@@ -38,11 +38,30 @@ int hash_function(const char* word)
  */
 bool check(const char *word)
 {
-    // for (i = 0; i < sizeof(text); i++)
-    // {
-    //     fscanf(text, "%s", word);
-    //     if ()
-    // }
+    // fprintf(stderr, "This is my word: %s\n", word);
+
+    char * lower_word = tolower(word);
+
+    for (int i = 0; i < hash_size; i++)
+    {
+        node* cursor = list[i];
+
+        while (cursor != NULL)
+        {
+            if (strcmp(cursor->word, lower_word) == true)
+            {
+                return true;
+            }
+            else
+            {
+                cursor = cursor->next;
+            }
+        }
+
+        return false;
+
+    }
+
     return false;
 }
 
@@ -73,7 +92,7 @@ bool load(const char *dictionary)
     // scan the dictionary until the end of the file
     while (fscanf(dict, "%s\n", file_word) != EOF)
     {
-        hash = hash_function(file_word);
+        hash_num = hash(file_word);
 
         // allocate memory for each new word
         node* new_node = malloc(sizeof(node));
@@ -90,14 +109,14 @@ bool load(const char *dictionary)
         strcpy(new_node->word, file_word);
 
         // insert into hash table linked list
-        if (list[hash] == NULL)
+        if (list[hash_num] == NULL)
         {
-            list[hash] = new_node;
+            list[hash_num] = new_node;
         }
         else
         {
-            new_node-> next = list[hash];
-            list[hash] = new_node;
+            new_node-> next = list[hash_num];
+            list[hash_num] = new_node;
         }
 
     }
