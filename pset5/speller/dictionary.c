@@ -33,36 +33,51 @@ int hash(const char* word)
     return hash_num % hash_size;
 }
 
+// universal to-lower function
+// char lowercase(const char* word)
+// {
+//     char lower_word[LENGTH + 1];
+
+//     // loop to make all letters in word lowercase
+//     for (int n = 0; n < strlen(word); n++)
+//     {
+//         lower_word[n] = tolower(word[n]);
+//     }
+
+//     return lower_word;
+// }
+
 /**
  * Returns true if word is in dictionary else false.
  */
 bool check(const char *word)
 {
-    // fprintf(stderr, "This is my word: %s\n", word);
+    char lower_word[LENGTH + 1] = "";
 
-    char * lower_word = tolower(word);
-
-    for (int i = 0; i < hash_size; i++)
+    // loop to make all letters in word lowercase
+    for (int n = 0; n < strlen(word); n++)
     {
-        node* cursor = list[i];
+        lower_word[n] = tolower(word[n]);
+    }
 
-        while (cursor != NULL)
+    int index = hash(lower_word);
+
+    node* cursor = list[index];
+
+    while (cursor != NULL)
+    {
+        if (strcmp(cursor->word, lower_word) == 0)
         {
-            if (strcmp(cursor->word, lower_word) == true)
-            {
-                return true;
-            }
-            else
-            {
-                cursor = cursor->next;
-            }
+            return true;
         }
-
-        return false;
-
+        else
+        {
+            cursor = cursor->next;
+        }
     }
 
     return false;
+
 }
 
 /**
@@ -78,7 +93,7 @@ bool load(const char *dictionary)
         fprintf(stderr, "Dictionary file not loaded.\n");
         return 1;
     }
-    else fprintf(stderr, "File opened.\n");
+    // else fprintf(stderr, "File opened.\n");
 
     // initially set all pointers in hash table to NULL
     for (int i = 0; i < hash_size; i++)
@@ -105,6 +120,8 @@ bool load(const char *dictionary)
 
         // increment counter for every word found
         word_count++;
+
+
 
         strcpy(new_node->word, file_word);
 
@@ -137,6 +154,11 @@ unsigned int size(void)
  */
 bool unload(void)
 {
+    for (int j = 0; j < hash_size; j++)
+    {
+        free(list[j]);
+    }
+
     return true;
 
 }
