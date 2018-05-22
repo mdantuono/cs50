@@ -121,8 +121,6 @@ bool load(const char *dictionary)
         // increment counter for every word found
         word_count++;
 
-
-
         strcpy(new_node->word, file_word);
 
         // insert into hash table linked list
@@ -154,6 +152,7 @@ unsigned int size(void)
  */
 bool unload(void)
 {
+
     for (int j = 0; j < hash_size; j++)
     {
         free(list[j]);
