@@ -155,7 +155,12 @@ bool unload(void)
 
     for (int j = 0; j < hash_size; j++)
     {
-        free(list[j]);
+        node* unloading = list[j];
+        while (unloading != NULL)
+        {
+            free(unloading);
+            unloading = unloading->next;
+        }
     }
 
     return true;
