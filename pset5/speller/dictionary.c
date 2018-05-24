@@ -41,27 +41,6 @@ int hash_index(const char *word)
   return hash % hash_size;
 }
 
-// hash function from cs50 study website
-// int hash(const char* word)
-// {
-//     hash_num = toupper(word[0] - 'A');
-//     return hash_num % hash_size;
-// }
-
-// universal to-lower function
-// char lowercase(const char* word)
-// {
-//     char lower_word[LENGTH + 1];
-
-//     // loop to make all letters in word lowercase
-//     for (int n = 0; n < strlen(word); n++)
-//     {
-//         lower_word[n] = tolower(word[n]);
-//     }
-
-//     return lower_word;
-// }
-
 /**
  * Returns true if word is in dictionary else false.
  */
