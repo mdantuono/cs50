@@ -26,7 +26,7 @@ node;
 // create hash table
 node* list[hash_size];
 
-// hash function from Greg
+// hash function from Greg Smith
 int hash_index(const char *word)
 {
    unsigned int length = strlen(word);
