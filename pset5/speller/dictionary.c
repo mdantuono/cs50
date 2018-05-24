@@ -11,7 +11,7 @@
 #include "dictionary.h"
 
 // variable declarations
-const int hash_size = 26;
+const int hash_size = 200000;
 int word_count = 0;
 int hash_num = 0;
 
@@ -26,12 +26,27 @@ node;
 // create hash table
 node* list[hash_size];
 
-// hash function from cs50 study website
-int hash(const char* word)
+// hash function from Greg
+int hash_index(const char *word)
 {
-    hash_num = toupper(word[0] - 'A');
-    return hash_num % hash_size;
+   unsigned int length = strlen(word);
+   unsigned int hash = 1315423911;
+   unsigned int i    = 0;
+
+  for (i = 0; i < length; ++word, ++i)
+  {
+     hash ^= ((hash << 5) + (*word) + (hash >> 2));
+  }
+
+  return hash % hash_size;
 }
+
+// hash function from cs50 study website
+// int hash(const char* word)
+// {
+//     hash_num = toupper(word[0] - 'A');
+//     return hash_num % hash_size;
+// }
 
 // universal to-lower function
 // char lowercase(const char* word)
@@ -60,7 +75,7 @@ bool check(const char *word)
         lower_word[n] = tolower(word[n]);
     }
 
-    int index = hash(lower_word);
+    int index = hash_index(lower_word);
 
     node* cursor = list[index];
 
@@ -107,7 +122,7 @@ bool load(const char *dictionary)
     // scan the dictionary until the end of the file
     while (fscanf(dict, "%s\n", file_word) != EOF)
     {
-        hash_num = hash(file_word);
+        hash_num = hash_index(file_word);
 
         // allocate memory for each new word
         node* new_node = malloc(sizeof(node));
