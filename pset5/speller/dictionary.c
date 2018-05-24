@@ -118,6 +118,9 @@ bool load(const char *dictionary)
             return false;
         }
 
+        // set 'next' node to null
+        new_node->next = NULL;
+
         // increment counter for every word found
         word_count++;
 
@@ -152,14 +155,16 @@ unsigned int size(void)
  */
 bool unload(void)
 {
-
     for (int j = 0; j < hash_size; j++)
     {
         node* unloading = list[j];
+        node* temp;
+
         while (unloading != NULL)
         {
+            temp = unloading->next;
             free(unloading);
-            unloading = unloading->next;
+            unloading = temp;
         }
     }
 
