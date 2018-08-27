@@ -40,14 +40,14 @@ db = SQL("sqlite:///finance.db")
 @login_required
 def index():
     """Show portfolio of stocks"""
-    # return apology("TODO")
+    return render_template("index.html")
 
 
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
     """Buy shares of stock"""
-    return apology("TODO")
+    return render_template("buy.html")
 
 
 @app.route("/history")
@@ -109,7 +109,12 @@ def logout():
 @login_required
 def quote():
     """Get stock quote."""
-    return apology("TODO")
+    if request.method == "POST":
+        stock = lookup(request.form.get("symbol"))
+        print(stock)
+        return render_template("quote.html", stock=stock)
+    else:
+        return render_template("quote.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -124,8 +129,8 @@ def register():
         elif not request.form.get("password"):
             return apology("must provide password", 403)
 
-        db.execute("INSERT INTO \"users\" (\"id\",\"username\",\"hash\") VALUES (NULL, :u, :p)", u=request.form.get("username"), p=request.form.get("password"))
-        return redirect("/")
+        db.execute("INSERT INTO \"users\" (\"username\",\"hash\") VALUES (:u, :p)", u=request.form.get("username"), p=generate_password_hash(request.form.get("password")))
+        return redirect("/login")
     else:
         return render_template("register.html")
 
