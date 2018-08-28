@@ -6,7 +6,7 @@
 
 {% block main %}
     {% if stock %}
-        <p>The stock {{stock.name}} has a price of {{stock.price}}</p>
+        <p>The stock <strong>{{stock.name}}</strong> has a price of <strong>${{stock.price}}</strong></p>
     {% else %}
         <h6>Here you can search a stock</h6>
         <form class="form-group" action="/quote" method="post">

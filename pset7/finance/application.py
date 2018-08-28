@@ -40,13 +40,29 @@ db = SQL("sqlite:///finance.db")
 @login_required
 def index():
     """Show portfolio of stocks"""
-    return render_template("index.html")
+    portfolio = db.execute("SELECT * from portfolio where id=:id", id=session["user_id"])
+    for row in portfolio:
+        print(row)
+    return render_template("index.html", portfolio=portfolio)
 
 
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
     """Buy shares of stock"""
+    if request.method == "POST":
+        stock = lookup(request.form.get("symbol"))
+        print(stock["symbol"])
+        shares = int(request.form.get("shares"))
+        print(shares)
+        portfolio = db.execute("SELECT * from portfolio where id=:id", id=session["user_id"])
+        if stock["symbol"] in portfolio:
+            db.execute("UPDATE portfolio SET 'shares' = shares + :sh where symbol=:s", sh=shares, s=stock["symbol"])
+            db.execute("UPDATE users SET 'cash' = cash - :c where id=:id", c=shares * stock["price"], id=session["user_id"])
+        else:
+            db.execute("INSERT INTO portfolio (symbol,price,shares,id) VALUES (:s,:p,:sh,:id)", s=stock["symbol"], p=usd(stock["price"]), sh=shares, id=session["user_id"])
+            db.execute("UPDATE users SET 'cash' = cash - :c where id=:id", c=shares * stock["price"], id=session["user_id"])
+        return redirect("/")
     return render_template("buy.html")
 
 
@@ -54,7 +70,10 @@ def buy():
 @login_required
 def history():
     """Show history of transactions"""
-    return apology("TODO")
+    transactions = db.execute("SELECT * from portfolio where id=:id", id=session["user_id"])
+    for row in transactions:
+        print(row)
+    return render_template("history.html", transactions=transactions)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -86,6 +105,7 @@ def login():
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
 
+        userName = (rows[0]["username"])
         # Redirect user to home page
         return redirect("/")
 
@@ -129,7 +149,7 @@ def register():
         elif not request.form.get("password"):
             return apology("must provide password", 403)
 
-        db.execute("INSERT INTO \"users\" (\"username\",\"hash\") VALUES (:u, :p)", u=request.form.get("username"), p=generate_password_hash(request.form.get("password")))
+        db.execute("INSERT INTO users (username, hash) VALUES (:u, :p)", u=request.form.get("username"), p=generate_password_hash(request.form.get("password")))
         return redirect("/login")
     else:
         return render_template("register.html")
