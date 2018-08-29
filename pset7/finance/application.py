@@ -42,7 +42,10 @@ def index():
     """Show portfolio of stocks"""
     portfolio = db.execute("SELECT * from portfolio where id=:id", id=session["user_id"])
     for row in portfolio:
-        print(row)
+        print(row["symbol"])
+        updatedInfo = lookup(row["symbol"])
+        db.execute("UPDATE portfolio SET 'price' = :u WHERE symbol = :s", u=usd(updatedInfo['price']), s=row["symbol"])
+    portfolio = db.execute("SELECT * from portfolio where id=:id", id=session["user_id"])
     return render_template("index.html", portfolio=portfolio)
 
 
@@ -59,8 +62,8 @@ def buy():
         print(portfolio)
         for i in portfolio:
             if portfolio[i]["symbol"] == stock:
-                db.execute("UPDATE portfolio SET 'shares' = shares + :sh where symbol=:s", sh=shares, s=stock["symbol"])
-                db.execute("UPDATE users SET 'cash' = cash - :c where id=:id", c=shares * stock["price"], id=session["user_id"])
+                db.execute("UPDATE portfolio SET 'shares' = shares + :sh WHERE symbol=:s", sh=shares, s=stock["symbol"])
+                db.execute("UPDATE users SET 'cash' = cash - :c WHERE id=:id", c=shares * stock["price"], id=session["user_id"])
                 return redirect("/")
 
         db.execute("INSERT INTO portfolio (symbol,price,shares,id) VALUES (:s,:p,:sh,:id)", s=stock["symbol"], p=usd(stock["price"]), sh=shares, id=session["user_id"])
