@@ -56,13 +56,17 @@ def buy():
         shares = int(request.form.get("shares"))
         print(shares)
         portfolio = db.execute("SELECT * from portfolio where id=:id", id=session["user_id"])
-        if stock["symbol"] in portfolio:
-            db.execute("UPDATE portfolio SET 'shares' = shares + :sh where symbol=:s", sh=shares, s=stock["symbol"])
-            db.execute("UPDATE users SET 'cash' = cash - :c where id=:id", c=shares * stock["price"], id=session["user_id"])
-        else:
-            db.execute("INSERT INTO portfolio (symbol,price,shares,id) VALUES (:s,:p,:sh,:id)", s=stock["symbol"], p=usd(stock["price"]), sh=shares, id=session["user_id"])
-            db.execute("UPDATE users SET 'cash' = cash - :c where id=:id", c=shares * stock["price"], id=session["user_id"])
+        print(portfolio)
+        for i in portfolio:
+            if portfolio[i]["symbol"] == stock:
+                db.execute("UPDATE portfolio SET 'shares' = shares + :sh where symbol=:s", sh=shares, s=stock["symbol"])
+                db.execute("UPDATE users SET 'cash' = cash - :c where id=:id", c=shares * stock["price"], id=session["user_id"])
+                return redirect("/")
+
+        db.execute("INSERT INTO portfolio (symbol,price,shares,id) VALUES (:s,:p,:sh,:id)", s=stock["symbol"], p=usd(stock["price"]), sh=shares, id=session["user_id"])
+        db.execute("UPDATE users SET 'cash' = cash - :c where id=:id", c=shares * stock["price"], id=session["user_id"])
         return redirect("/")
+
     return render_template("buy.html")
 
 
@@ -159,7 +163,13 @@ def register():
 @login_required
 def sell():
     """Sell shares of stock"""
-    return apology("TODO")
+    if request.method == "POST":
+        portfolio = db.execute("SELECT * FROM portfolio WHERE id=:id", id=session["user_id"])
+        print(portfolio)
+        db.execute("UPDATE portfolio SET 'shares' = shares - :sh where symbol=:s", sh=request.form.get("shares"), s=request.form.get("symbol"))
+        return redirect("/")
+    else:
+        return render_template("sell.html")
 
 
 def errorhandler(e):
