@@ -36,17 +36,23 @@ Session(app)
 db = SQL("sqlite:///finance.db")
 
 
+
 @app.route("/")
 @login_required
 def index():
     """Show portfolio of stocks"""
-    portfolio = db.execute("SELECT * from portfolio where id=:id", id=session["user_id"])
+    totalPrice=0
+    portfolio = db.execute("SELECT * FROM portfolio WHERE id=:id", id=session["user_id"])
+    user = db.execute("SELECT * FROM users WHERE id=:id", id=session["user_id"])
     for row in portfolio:
-        print(row["symbol"])
+        # print(row)
         updatedInfo = lookup(row["symbol"])
-        db.execute("UPDATE portfolio SET 'price' = :u WHERE symbol = :s", u=usd(updatedInfo['price']), s=row["symbol"])
-    portfolio = db.execute("SELECT * from portfolio where id=:id", id=session["user_id"])
-    return render_template("index.html", portfolio=portfolio)
+        db.execute("UPDATE portfolio SET 'price' = :u WHERE symbol = :s", u=updatedInfo['price'], s=row["symbol"])
+    portfolio = db.execute("SELECT * FROM portfolio WHERE id=:id", id=session["user_id"])
+    for row in portfolio:
+        totalPrice += row["price"] * row["shares"]
+    # print(user[0])
+    return render_template("index.html", portfolio=portfolio, usd=usd, user=user[0], totalPrice=totalPrice)
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -55,18 +61,20 @@ def buy():
     """Buy shares of stock"""
     if request.method == "POST":
         stock = lookup(request.form.get("symbol"))
-        print(stock["symbol"])
+        # print(stock["symbol"])
         shares = int(request.form.get("shares"))
-        print(shares)
-        portfolio = db.execute("SELECT * from portfolio where id=:id", id=session["user_id"])
+        # print(shares)
+        portfolio = db.execute("SELECT * FROM portfolio WHERE id=:id", id=session["user_id"])
         print(portfolio)
+        user = db.execute("SELECT * FROM users WHERE id=:id", id=session["user_id"])
         for i in portfolio:
-            if portfolio[i]["symbol"] == stock:
+            print(i)
+            if i["symbol"] == stock["symbol"]:
                 db.execute("UPDATE portfolio SET 'shares' = shares + :sh WHERE symbol=:s", sh=shares, s=stock["symbol"])
                 db.execute("UPDATE users SET 'cash' = cash - :c WHERE id=:id", c=shares * stock["price"], id=session["user_id"])
                 return redirect("/")
 
-        db.execute("INSERT INTO portfolio (symbol,price,shares,id) VALUES (:s,:p,:sh,:id)", s=stock["symbol"], p=usd(stock["price"]), sh=shares, id=session["user_id"])
+        db.execute("INSERT INTO portfolio (symbol,price,shares,id) VALUES (:s,:p,:sh,:id)", s=stock["symbol"], p=stock["price"], sh=shares, id=session["user_id"])
         db.execute("UPDATE users SET 'cash' = cash - :c where id=:id", c=shares * stock["price"], id=session["user_id"])
         return redirect("/")
 
@@ -167,9 +175,18 @@ def register():
 def sell():
     """Sell shares of stock"""
     if request.method == "POST":
+        symbol = request.form.get("symbol")
+        shares = int(request.form.get("shares"))
         portfolio = db.execute("SELECT * FROM portfolio WHERE id=:id", id=session["user_id"])
         print(portfolio)
-        db.execute("UPDATE portfolio SET 'shares' = shares - :sh where symbol=:s", sh=request.form.get("shares"), s=request.form.get("symbol"))
+        for stock in portfolio:
+            print(stock)
+            if stock["symbol"] == symbol:
+                if stock["shares"] > 1 and stock["shares"] > shares:
+                    db.execute("UPDATE portfolio SET 'shares'=shares-:sh where symbol=:s", sh=shares, s=symbol)
+                elif stock["shares"] == 1:
+                    db.execute("DELETE FROM portfolio WHERE symbol=:s", s=symbol)
+
         return redirect("/")
     else:
         return render_template("sell.html")
