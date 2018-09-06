@@ -63,7 +63,9 @@ $(document).ready(function() {
 // Add marker for place to map
 function addMarker(place)
 {
-    marker = new google.maps.Marker(map)
+    // let marker = new google.maps.Marker({
+
+    // });
 }
 
 
@@ -98,7 +100,7 @@ function configure()
         templates: {
             suggestion: Handlebars.compile(
                 "<div>" +
-                "TODO" +
+                "{{place_name}}, {{admin_name1}}, {{postal_code}}" +
                 "</div>"
             )
         }

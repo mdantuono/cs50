@@ -4,6 +4,7 @@ from flask import Flask, jsonify, render_template, request
 
 from cs50 import SQL
 from helpers import lookup
+from urllib.parse import unquote
 
 # Configure application
 app = Flask(__name__)
@@ -38,9 +39,19 @@ def articles():
 @app.route("/search")
 def search():
     """Search for places that match query"""
+    q = request.args.get("q") + "%"
+    # Check if query is a number, if so it is most likely a postal code. Query the database with that.
+    if q[:-1].isdigit():
+        result = db.execute("SELECT * FROM places WHERE postal_code LIKE :q", q=q)
+    # Else if it is not a number, query for place name
+    else:
+        # If the length of the query is 2, it is most likely the abbreviated state name, so check that.
+        if len(q) == 3:
+            result = db.execute("SELECT * FROM places WHERE admin_code1 LIKE :q", q=q)
+        else:
+            result = db.execute("SELECT * FROM places WHERE admin_name1 OR admin_name2 OR place_name LIKE :q", q=q)
 
-    # TODO
-    return jsonify([])
+    return jsonify([result])
 
 
 @app.route("/update")
