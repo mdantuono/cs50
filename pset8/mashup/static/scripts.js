@@ -38,7 +38,7 @@ $(document).ready(function() {
     // Options for map
     // https://developers.google.com/maps/documentation/javascript/reference#MapOptions
     let options = {
-        center: {lat: 36, lng: -100}, // USA center
+        center: {lat: 38, lng: -97}, // USA center
         disableDefaultUI: true,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         maxZoom: 14,
@@ -99,9 +99,7 @@ function configure()
         source: search,
         templates: {
             suggestion: Handlebars.compile(
-                "<div>" +
-                "{{place_name}}, {{admin_name1}}, {{postal_code}}" +
-                "</div>"
+                "<div>{{place_name}}, {{admin_name1}}, {{postal_code}}</div>"
             )
         }
     });

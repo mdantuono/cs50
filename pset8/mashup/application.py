@@ -46,12 +46,12 @@ def search():
     # Else if it is not a number, query for place name
     else:
         # If the length of the query is 2, it is most likely the abbreviated state name, so check that.
-        if len(q) == 3:
+        if len(q[:-1]) == 2:
             result = db.execute("SELECT * FROM places WHERE admin_code1 LIKE :q", q=q)
         else:
             result = db.execute("SELECT * FROM places WHERE admin_name1 OR admin_name2 OR place_name LIKE :q", q=q)
 
-    return jsonify([result])
+    return jsonify(result)
 
 
 @app.route("/update")
