@@ -4,9 +4,11 @@ let map;
 // Markers for map
 let markers = [];
 
+
 // Info window
 let info = new google.maps.InfoWindow();
 
+let newLatLong;
 
 // Execute when the DOM is fully loaded
 $(document).ready(function() {
@@ -63,9 +65,12 @@ $(document).ready(function() {
 // Add marker for place to map
 function addMarker(place)
 {
-    // let marker = new google.maps.Marker({
+    let marker = new google.maps.Marker({
+        map: map,
+        position: newLatLong
+    });
 
-    // });
+    markers.push(marker);
 }
 
 
@@ -110,6 +115,8 @@ function configure()
         // Set map's center
         map.setCenter({lat: parseFloat(suggestion.latitude), lng: parseFloat(suggestion.longitude)});
 
+        newLatLong = {lat: parseFloat(suggestion.latitude), lng: parseFloat(suggestion.longitude)}
+
         // Update UI
         update();
     });
@@ -138,7 +145,7 @@ function configure()
 // Remove markers from map
 function removeMarkers()
 {
-    // TODO
+    // markers.setMap(null);
 }
 
 
