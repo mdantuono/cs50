@@ -70,23 +70,24 @@ function addMarker(place)
     marker.setPosition(newLatLong);
 
     marker.addListener('click', function() {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
         showInfo(marker);
-    });
 
     let parameters = {
         geo: newZip
     };
-    $.getJSON("/articles", parameters, function(data, textStatus, jqXHR) {
-        var content = '<ul>';
 
-        data.forEach(function(row) {
-           content += '<li><a href="' + row.link + '" target="_blank">' +  row.title + '</a></li>';
+        $.getJSON("/articles", parameters, function(data, textStatus, jqXHR) {
+            var content = '<ul>';
+
+            data.forEach(function(row) {
+               content += '<li><a href="' + row.link + '" target="_blank">' +  row.title + '</a></li>';
+            });
+
+            content += '</ul>';
+            showInfo(marker, content);
         });
-
-        content += '</ul>';
-        showInfo(marker, content);
     });
-    showInfo(marker);
 
 }
 
