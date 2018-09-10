@@ -1,7 +1,7 @@
 import feedparser
 import urllib.parse
 
-
+# takes in postal code
 def lookup(geo):
     """Look up articles for geo"""
 

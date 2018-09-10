@@ -31,9 +31,9 @@ def index():
 @app.route("/articles")
 def articles():
     """Look up articles for geo"""
-
-    # TODO
-    return jsonify([])
+    geo = request.args.get("geo")
+    articles = lookup(geo)
+    return jsonify(articles)
 
 
 @app.route("/search")

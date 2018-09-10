@@ -2,13 +2,13 @@
 let map;
 
 // Markers for map
-let markers = [];
-
+let marker = new google.maps.Marker();
 
 // Info window
 let info = new google.maps.InfoWindow();
 
 let newLatLong;
+let newZip;
 
 // Execute when the DOM is fully loaded
 $(document).ready(function() {
@@ -65,12 +65,29 @@ $(document).ready(function() {
 // Add marker for place to map
 function addMarker(place)
 {
-    let marker = new google.maps.Marker({
-        map: map,
-        position: newLatLong
+    marker.setMap(map);
+    marker.setAnimation(google.maps.Animation.DROP);
+    marker.setPosition(newLatLong);
+
+    marker.addListener('click', function() {
+        showInfo(marker);
     });
 
-    markers.push(marker);
+    let parameters = {
+        geo: newZip
+    };
+    $.getJSON("/articles", parameters, function(data, textStatus, jqXHR) {
+        var content = '<ul>';
+
+        data.forEach(function(row) {
+           content += '<li><a href="' + row.link + '" target="_blank">' +  row.title + '</a></li>';
+        });
+
+        content += '</ul>';
+        showInfo(marker, content);
+    });
+    showInfo(marker);
+
 }
 
 
@@ -114,9 +131,8 @@ function configure()
 
         // Set map's center
         map.setCenter({lat: parseFloat(suggestion.latitude), lng: parseFloat(suggestion.longitude)});
-
-        newLatLong = {lat: parseFloat(suggestion.latitude), lng: parseFloat(suggestion.longitude)}
-
+        newLatLong = {lat: parseFloat(suggestion.latitude), lng: parseFloat(suggestion.longitude)};
+        newZip = suggestion.postal_code;
         // Update UI
         update();
     });
@@ -145,7 +161,7 @@ function configure()
 // Remove markers from map
 function removeMarkers()
 {
-    // markers.setMap(null);
+    marker.setMap(null);
 }
 
 
